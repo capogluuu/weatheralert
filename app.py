@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 from flask_apscheduler import APScheduler
+from config import Config
 import database
 
 
