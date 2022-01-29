@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request
+#from jinja2 import Template
+import database
 app = Flask(__name__, template_folder='template')
 
 
@@ -17,7 +19,13 @@ def home():
             longitude = setting_dict["longitude"],
             threshold_value = setting_dict["threshold_value"],
             check_in_frequency = setting_dict["check_in_frequency"])
+        
 
+        func = database.process(latitude = setting_dict["latitude"], longitude = setting_dict["longitude"],
+                        threshold_value = setting_dict["threshold_value"], check_in_frequency = setting_dict["check_in_frequency"],
+                        database_name="290120221asdakif")
+        func.clean_sql_database()
+        
         with open('settings.txt', "w") as textfile:
             textfile.write(setting_text_template)
 
@@ -38,7 +46,12 @@ def home():
                 temp_variable == "check_in_frequency"):
                     set_dict[temp_variable] = list_of_lines[i].split("= ")[j+1].replace("\n","")
 
-        return render_template('index.html')
+        func = database.process(latitude = set_dict["latitude"], longitude = set_dict["longitude"],
+                                threshold_value = set_dict["threshold_value"], check_in_frequency = set_dict["check_in_frequency"],
+                                database_name="290120221asdakif")
 
+    first_10_list = func.main_process()
+    return render_template('template.html', table=tuple(first_10_list))
+    
 if __name__=="__main__":
     app.run(debug=True)

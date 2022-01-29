@@ -1,0 +1,4 @@
+https://code.visualstudio.com/docs/python/tutorial-flask
+
+.venv\scripts\activate 
+python -m flask run
