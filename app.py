@@ -1,8 +1,11 @@
 from flask import Flask, render_template, request
-#from jinja2 import Template
+from flask_apscheduler import APScheduler
 import database
-app = Flask(__name__, template_folder='template')
 
+
+
+app = Flask(__name__, template_folder='template')
+scheduler = APScheduler()
 
 @app.route("/", methods = ['POST', 'GET'])
 def home():
@@ -25,7 +28,7 @@ def home():
                         threshold_value = setting_dict["threshold_value"], check_in_frequency = setting_dict["check_in_frequency"],
                         database_name="290120221asdakif")
         func.clean_sql_database()
-        
+
         with open('settings.txt', "w") as textfile:
             textfile.write(setting_text_template)
 
@@ -52,6 +55,11 @@ def home():
 
     first_10_list = func.main_process()
     return render_template('template.html', table=tuple(first_10_list))
-    
+
+def scheduledTask():
+    print("This task is running every 5 seconds")
+
 if __name__=="__main__":
+    scheduler.add_job(id ='Scheduled task', func = scheduledTask, trigger = 'interval', seconds = 5)
+    scheduler.start()
     app.run(debug=True)

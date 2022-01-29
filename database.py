@@ -2,6 +2,7 @@ import pandas as pd
 import requests
 import sqlite3
 import os.path
+from config import Config
 
 class process():
     def __init__(self, latitude = 39.7456, longitude = -97.0892,
