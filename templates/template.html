@@ -11,7 +11,7 @@
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 </head>
 <body>
-<hr>
+
 <div class="container bootstrap snippets bootdey">
     <div class="row">
         <div class="col-sm-10">
@@ -64,8 +64,12 @@
                                 <th>Alert Id</th>
                             </tr>
                             </thead>
+
+                            {% if data!= "Empty" %}
+                                <body onload="showAlert()">
+                            {% endif %}
+          
                             <tbody id="items">
-                            
                                 {% for item in table%}
                                     {% if item.alert_id != 'no_problem' %}
                                         <tr class="highlight">
@@ -155,19 +159,21 @@
 </div>
 <!--/row-->
 
-<style type="text/css">
-    body {
-        margin-top: 20px;
-    }
+    <style type="text/css">
+        body {
+            margin-top: 20px;
+        }
 
-    .highlight {
-        background-color: #f18973;
-    }
-</style>
+        .highlight {
+            background-color: #f18973;
+        }
+    </style>
 
-<script type="text/javascript">
+  <script>
+  function showAlert() {
+    alert ("{{data}} 132");
+  }
+  </script>
 
-
-</script>
 </body>
 </html>
