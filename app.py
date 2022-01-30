@@ -5,7 +5,7 @@ import database
 
 
 
-app = Flask(__name__, template_folder='template')
+app = Flask(__name__, template_folder='templates')
 scheduler = APScheduler()
 
 @app.route("/", methods = ['POST', 'GET'])
