@@ -23,3 +23,7 @@ py -3 -m venv .venv
 
 pip install -r requirements.txt
 python -m flask run
+
+#If you want to close all the system
+Ctrl-C  #Close the flash app
+deactivate venv
