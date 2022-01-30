@@ -2,5 +2,5 @@
 latitude = 39.7456
 longitude = -97.0892
 # Application Settings
-threshold_value = 10
+threshold_value = 1231
 check_in_frequency = 30

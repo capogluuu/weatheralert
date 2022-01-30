@@ -54,8 +54,8 @@ def home():
                                 threshold_value = set_dict["threshold_value"], check_in_frequency = set_dict["check_in_frequency"],
                                 database_name="290120221asdakif")
 
-    first_10_list = func.main_process()
-    return render_template('template.html', table=tuple(first_10_list))
+    first_10_list, request_text = func.main_process()
+    return render_template('template.html', table=tuple(first_10_list), data=str(request_text))
 
 def scheduledTask():
     print("This task is running every 5 seconds")

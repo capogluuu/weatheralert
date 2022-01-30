@@ -1,8 +1,10 @@
+from wsgiref.util import request_uri
 import pandas as pd
 import requests
 import sqlite3
 import os.path
 from config import Config
+from alertus_api import alertus_api_func
 
 class process():
     def __init__(self, latitude = 39.7456, longitude = -97.0892,
@@ -117,7 +119,6 @@ class process():
         con.close()
 
     def sql_data_to_list_of_dicts(self,path_to_db, select_query="SELECT * from samples2  LIMIT 10"):
-        """Returns data from an SQL query as a list of dicts."""
         try:
             con = sqlite3.connect(f'{path_to_db}.db')
             con.row_factory = sqlite3.Row
@@ -130,25 +131,35 @@ class process():
         finally:
             con.close()
 
-    def clean_sql_database(self):
+    def clean_sql_database(self, query="DELETE FROM samples2;" ):
         try:
             con = sqlite3.connect(f'{self.database_name}.db')
-            con.execute("DELETE FROM samples2;",)
+            con.execute(f"{query}")
             con.commit()
         except Exception as e:
-            print(f"Failed to execute. Query: {select_query}\n with error:\n{e}")
+            print(f"Failed to execute. Query: {query}\n with error:\n{e}")
             return []
         finally:
             con.close()
 
-    def main_process(self):
+    def main_process(self, clean_database=True):
+        request_text = "Empty"
         temp_variable = self.weather_api_integration()
         database_data = self.create_database_table(temp_variable)
         
         if not os.path.exists(f'{self.database_name}.db'):
             self.create_database()
         
+        if(clean_database):
+            self.clean_sql_database()
+
+        number_of_alert = database_data["alert_generated"].count(True)
+
+        if(number_of_alert):
+            alert = alertus_api_func(numberAlert = number_of_alert)
+            request_text = alert.post_request()
+
         self.insert_element_to_database(database_data)
         
-        return self.sql_data_to_list_of_dicts(self.database_name)
+        return self.sql_data_to_list_of_dicts(self.database_name), request_text
         
